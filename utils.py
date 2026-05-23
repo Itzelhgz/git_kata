@@ -3,12 +3,12 @@ import pandas as pd
 def load_data():
     """Load titanic dataset and return only male passengers."""
     df = pd.read_csv('data/titanic.csv')
-    df = df[df['Sex'] == 'male']
+    df = df[df['sex'] == 'male']
     return df
 
 def clean_data(df):
     """
-    Cleans the Titanic dataset.
+    Clean the input DataFrame.
 
     Parameters:
         df (pd.DataFrame): Input dataframe
@@ -16,14 +16,11 @@ def clean_data(df):
     Returns:
         pd.DataFrame: Cleaned dataframe
     """
-
-    # Drop rows with missing values
-    df = df.dropna()
+    # Drop rows where important columns are missing
+    df = df.dropna(subset=['pclass', 'sex', 'age'])
 
     # Convert categorical columns to lowercase
-    categorical_columns = df.select_dtypes(include=["object"]).columns
-
-    for col in categorical_columns:
+    for col in df.select_dtypes(include=['object']).columns:
         df[col] = df[col].str.lower()
 
     return df
